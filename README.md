@@ -23,6 +23,58 @@
 
 --- 
 ### Installation
+
+#### Swift Package Manager
+
+SPM 支持 Swift tools 5.5+、iOS 12+，使用 Swift 5 语言模式。
+
+在 Xcode 中选择 **File → Add Package Dependencies**，输入：
+
+```text
+https://github.com/AJ-song/JXPageControl.git
+```
+
+在本次改动发布为 `0.1.6` 后，选择从 `0.1.6` 开始的版本规则，并将 `JXPageControl` 产品添加到应用 Target。
+
+其他 Swift Package 可以这样依赖本库：
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/AJ-song/JXPageControl.git", from: "0.1.6")
+],
+targets: [
+    .target(
+        name: "YourTarget",
+        dependencies: [
+            .product(name: "JXPageControl", package: "JXPageControl")
+        ]
+    )
+]
+```
+
+使用时继续 `import JXPageControl`。本库只有 UIKit/CoreGraphics 系统框架依赖，无需安装其他第三方包。产品未指定静态或动态链接类型，由 SPM/Xcode 选择；原示例和 Pods 不参与包构建。
+
+##### 构建与版本发布
+
+在仓库根目录验证模拟器构建：
+
+```sh
+xcodebuild -scheme JXPageControl -configuration Debug \
+  -destination 'generic/platform=iOS Simulator' \
+  -derivedDataPath /tmp/JXPageControl-SPM-DerivedData \
+  CODE_SIGNING_ALLOWED=NO build
+```
+
+根目录的旧 `_Pods.xcodeproj` 软链接已移除，避免命令行误选 Pods 工程；原有 Example 工程保留。
+
+建议将本次清单、README 和忽略规则提交到 `AJ-song/JXPageControl` 后，创建新标签 `0.1.6`。Tag 必须指向包含根目录 `Package.swift` 的提交，SPM 才能按版本安装。`Package.swift` 不填写本库版本，原 `0.1.5` 和 podspec 保持不变。
+
+在 GitHub 网页可通过 **Add file → Upload files** 上传 `Package.swift`，通过文件编辑器更新 README 和 `.gitignore` 并删除根目录 `_Pods.xcodeproj`。全部提交后，进入 **Releases → Draft a new release**，创建 `0.1.6` 标签并选择包含改动的分支，再发布正式 Release。不要勾选预发布版本。
+
+JXBanner 从 `0.3.7` 起通过远程包依赖使用本库。先发布 JXPageControl `0.1.6`，再发布 JXBanner。应用只使用 Banner 时，添加 JXBanner 即可自动解析和构建本依赖。
+
+#### CocoaPods
+
 To install, simply add the following code to your Podfile   : 
 
 ```ruby
